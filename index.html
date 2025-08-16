@@ -1,45 +1,555 @@
 <!DOCTYPE html>
-<html ⚡ lang="pt">
-  <head>
-    <meta charset="utf-8" />
-    <title>Meu diário mórfico</title>
-    <link
-      rel="shortcut icon"
-      href="https://cdn.glitch.com/d7f46a57-0ca4-4cca-ab0f-69068dec6631%2Fcheese-favicon.png?1540228964214"
-    />
-    <link rel="stylesheet" href="style.css" />
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jornal Agora — Notícias, Esportes, Lazer e Negócios</title>
+  <meta name="description" content="Portal de notícias com editorias de Últimas, Brasil, Mundo, Esportes, Lazer, Shows & Eventos, Curiosidades e Negócios." />
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3d59'/><text x='50' y='62' font-size='62' text-anchor='middle' fill='%23fff' font-family='Arial'>J</text></svg>">
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#1b1f24;
+      --muted:#6b7280;
+      --brand:#1e3d59;
+      --brand-2:#e63946;
+      --accent:#0ea5e9;
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(0,0,0,.08);
+      --shadow-sm:0 2px 8px rgba(0,0,0,.08);
+      --grid-gap:18px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0e14;--card:#0f141b;--text:#e5e7eb;--muted:#9aa3b2;--brand:#8ab4ff;--brand-2:#ff6b6b;--accent:#38bdf8;--shadow:0 8px 24px rgba(0,0,0,.5);--shadow-sm:0 2px 8px rgba(0,0,0,.5)}
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,Ubuntu,Inter,"Noto Sans",sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
 
-  </head>
-  <body>
-    <header class="headerbar"><h2>Contos e relatos</h2></header>
-    <main>
-      <div class="main-content">
-        <img
-          src="https://www.jornaldotocantins.com.br/image/policy:1.2670493:1711183800/image.jpg"
-        />
-        <div class="below-hero">
-          <h2 class="main-heading">Um breve relato meu com vendas na loja Pernambucanas</h2>
-          <p class="main-text">
-           O ano era 2013, eu vivia uma frustração profissional que determinou a minha transição de carreira logo após. Nos anos anteriores, eu realmente acreditava que a área de vendas era a minha vocação — talvez ainda seja. 
+    /* Header */
+    .topbar{background:var(--brand);color:#fff}
+    .container{width:min(1180px,92vw);margin:auto}
+    .topbar .row{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+    .brand .logo span{font-weight:900;font-size:1.1rem}
+    .brand .name{font-size:1.2rem}
+    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .nav a{opacity:.9;padding:8px 10px;border-radius:10px}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.12)}
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn{border:1px solid rgba(255,255,255,.35);padding:8px 12px;border-radius:10px;color:#fff}
+    .search-input{display:none}
+    .menu-toggle{display:none}
 
-De toda forma, alguns eventos fizeram com que eu mudasse por completo a minha direção. Trabalhando como vendedor de eletroeletrônicos na Pernambucanas, fui demitido em janeiro de 2014 por um gerente recém-chegado. Ele havia sido transferido e, em poucos dias — menos de uma semana —, ao ver em seu relatório que eu estava em último lugar nas vendas de garantia estendida e, com uma ordem de cima para cortar custos, não pensou duas vezes: comunicou a minha demissão sem muita cerimônia. Segundo suas próprias palavras, “não era nada pessoal”, apenas dois motivos: corte de custos e meu desempenho na venda de garantias.
+    /* Ticker */
+    .ticker{background:#0f2b44;color:#fff;border-top:2px solid #0c2033;border-bottom:2px solid #0c2033}
+    .ticker .inner{display:flex;gap:26px;align-items:center;overflow:auto;white-space:nowrap;padding:10px 0}
+    .ticker b{color:#93c5fd;margin-right:6px}
 
-Eu já não tinha mais vontade de empurrar esse produto aos clientes, como me fora ensinado. Por isso, estar em último no ranking era, para mim, motivo de orgulho. Ser demitido acabou sendo um prêmio, uma vitória da minha consciência e um peso a menos no meu travesseiro.
+    /* Layout */
+    .grid{display:grid;grid-template-columns:1.7fr 1fr;gap:var(--grid-gap);margin:24px 0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--grid-gap)}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--grid-gap)}
 
-Lembrei que eu não ficava feliz ao ver minha colega vendendo uma pequena geladeira a uma senhora muito idosa e simples, que parecia ter vindo direto do Vale do Jequitinhonha para dentro da loja. A geladeira custava R$ 799,00 à vista, mas, no parcelamento em 18 vezes, saía por quase o triplo do preço.
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card:hover{transform:translateY(-2px);transition:.2s ease;box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    .card .media{aspect-ratio:16/9;background:#e5e7eb;overflow:hidden}
+    .card .media img{width:100%;height:100%;object-fit:cover}
+    .card .content{padding:16px}
+    .kicker{font-size:.78rem;color:var(--brand-2);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+    .title{font-size:1.1rem;font-weight:800;margin:6px 0 8px}
+    .meta{font-size:.86rem;color:var(--muted)}
 
-Certa vez, vendi um notebook para um senhor e o enganei, dizendo que estava lhe dando a garantia sem custo algum, quando na verdade era apenas um “desconto fake” — algo facilmente perceptível ao conferir a nota fiscal. A maioria das pessoas não confere. Esse senhor, no entanto, voltou até mim após a compra e, como se estivesse esfregando a nota na minha cara, disse:
- — Você mentiu para mim, mesmo eu tendo te questionado várias vezes.
+    /* Hero */
+    .hero{grid-row:span 2}
+    .hero .title{font-size:1.6rem}
+    .hero .excerpt{color:var(--muted);margin-top:6px}
 
-Ele não cancelou a compra nem pediu a retirada da garantia. Só queria me mostrar o quão baixo eu havia agido naquela negociação, naquele momento eu não tinha onde enfiar a cabeça devido ao tamanho da vergonha que senti. Depois disso, decidi que não trabalharia mais com aquilo.
+    /* Sidebar widgets */
+    .widget{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .widget h3{margin:0 0 12px;font-size:1rem}
+    .list{display:grid;gap:12px}
+    .list .item{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center}
+    .list .thumb{width:92px;height:64px;border-radius:10px;overflow:hidden;background:#e5e7eb}
+    .list .thumb img{width:100%;height:100%;object-fit:cover}
 
-Hoje, percebo que essa experiência me ajudou a me tornar uma pessoa melhor. Não sou puritano, mas aprendi que é possível trabalhar sem precisar tirar vantagem dos outros “na bigodagem”. Eu sou brasileiro, mas não tenho culpa.
-Na minha cabeça, naquela época, a verdade era simples: fui demitido porque, no ranking de enganar clientes, eu estava em último lugar.
+    /* Section header */
+    .section{margin:36px 0}
+    .section .sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+    .section .sh h2{font-size:1.2rem}
+    .section .tabs{display:flex;gap:10px}
+    .pill{padding:6px 10px;border-radius:999px;background:#e2e8f0;color:#111;font-size:.85rem}
+    .pill[data-active="true"]{background:var(--brand);color:#fff}
 
-Um desabafo sobre a minha experiência como vendedor em 2013 na Pernambucanas do Shopping Del Rey em Belo Horizonte.
-          </p>
+    /* Footer */
+    footer{margin-top:40px;background:#0f2b44;color:#c8d3e3}
+    footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;padding:28px 0}
+    footer a{color:#e5e7eb;opacity:.9}
+    .copyright{border-top:1px solid rgba(255,255,255,.12);padding:12px 0;color:#a7b4c5;font-size:.9rem}
+
+    /* Chips */
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;font-size:.8rem;background:#eef2ff;color:#1e3a8a}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .grid{grid-template-columns:1fr}
+      .hero{grid-row:auto}
+      footer .cols{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 720px){
+      .nav{display:none}
+      .menu-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.35);padding:8px 12px;border-radius:10px}
+      .search-input{display:none}
+      .ticker .inner{gap:16px}
+      .grid-3{grid-template-columns:1fr 1fr}
+      .grid-4{grid-template-columns:1fr 1fr}
+      footer .cols{grid-template-columns:1fr}
+    }
+
+    /* Utilities */
+    .hidden{display:none!important}
+    .mt-0{margin-top:0}
+    .mt-24{margin-top:24px}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="topbar">
+    <div class="container row">
+      <div class="row">
+        <a class="brand" href="#">
+          <div class="logo"><span>J</span></div>
+          <div class="name">Jornal Agora</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#ultimas" class="active">Últimas</a>
+        <a href="#brasil">Brasil</a>
+        <a href="#mundo">Mundo</a>
+        <a href="#esportes">Esportes</a>
+        <a href="#lazer">Lazer</a>
+        <a href="#shows">Shows & Eventos</a>
+        <a href="#negocios">Negócios</a>
+        <a href="#curiosidades">Curiosidades</a>
+      </nav>
+      <div class="actions">
+        <button class="menu-toggle" aria-label="Abrir menu" onclick="toggleMenu()">Menu</button>
+        <a class="btn" href="#" onclick="toggleSearch(event)">Pesquisar</a>
+        <a class="btn" href="#" onclick="toggleTheme(event)">Tema</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search bar (overlay simple) -->
+  <div id="searchBar" class="container hidden" style="padding:12px 0">
+    <input type="search" placeholder="Busque por título, assunto, editoria..." aria-label="Pesquisar" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #d1d5db;background:var(--card);color:var(--text)">
+  </div>
+
+  <!-- Ticker / Últimas -->
+  <div class="ticker">
+    <div class="container">
+      <div class="inner" role="marquee" aria-label="Últimas notícias">
+        <div><b>Últimas</b> Mercado abre em alta após divulgação de indicadores.</div>
+        <div><b>Tempo</b> Frente fria avança; atenção a chuvas intensas no sul/sudeste.</div>
+        <div><b>Esportes</b> Clássico termina empatado; decisão fica para o jogo de volta.</div>
+        <div><b>Cultura</b> Mostra de cinema nacional anuncia programação gratuita.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid: Hero + Sidebar -->
+  <main class="container">
+    <section class="grid" id="ultimas">
+      <article class="card hero">
+        <div class="media"><img alt="Imagem de destaque" src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop"></div>
+        <div class="content">
+          <div class="kicker">Destaque do dia</div>
+          <h1 class="title">Transição profissional e ética nas vendas: um relato que virou aprendizado</h1>
+          <p class="excerpt">Entre metas agressivas e garantias estendidas, uma história sobre consciência, números e o que significa vencer — mesmo fora do ranking.</p>
+          <div class="meta">Por Redação • 16 ago 2025 • 6 min</div>
+          <div class="tag-row mt-24">
+            <span class="chip">Carreira</span>
+            <span class="chip">Opinião</span>
+            <span class="chip">Varejo</span>
+          </div>
+        </div>
+      </article>
+
+      <aside aria-label="Mais lidas" class="widget">
+        <h3>Mais lidas</h3>
+        <div class="list">
+          <a class="item" href="#">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1581093588401-16ef1b2c1200?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div>
+              <div class="kicker">Tecnologia</div>
+              <div class="title">IA generativa ganha novas aplicações no varejo</div>
+              <div class="meta">há 2h</div>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div>
+              <div class="kicker">Negócios</div>
+              <div class="title">Empreendedores apostam em nichos de alto valor</div>
+              <div class="meta">há 3h</div>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div>
+              <div class="kicker">Saúde</div>
+              <div class="title">Sono e produtividade: guia prático para o dia a dia</div>
+              <div class="meta">há 5h</div>
+            </div>
+          </a>
+        </div>
+      </aside>
+
+      <aside aria-label="Boletins" class="widget">
+        <h3>Boletins</h3>
+        <div class="tag-row">
+          <a class="chip" href="#">Manhã</a>
+          <a class="chip" href="#">Mercado</a>
+          <a class="chip" href="#">Tecnologia</a>
+          <a class="chip" href="#">Cidades</a>
+        </div>
+        <div class="mt-24" style="display:grid;gap:12px">
+          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox"> Receber alertas por e-mail</label>
+          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox"> Notificações no navegador</label>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Brasil / Mundo / Economia: grade 3 colunas -->
+    <section class="section" id="brasil">
+      <div class="sh">
+        <h2>Brasil</h2>
+        <div class="tabs">
+          <button class="pill" data-active="true">Hoje</button>
+          <button class="pill">Semana</button>
         </div>
       </div>
-    </main>
-  </body>
+      <div class="grid-3">
+        <!-- Repetir cards -->
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop" alt="Congresso Nacional"></div>
+          <div class="content">
+            <div class="kicker">Política</div>
+            <div class="title">Reforma administrativa avança em comissões</div>
+            <div class="meta">Brasília • 5 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1200&auto=format&fit=crop" alt="Indústria"></div>
+          <div class="content">
+            <div class="kicker">Economia</div>
+            <div class="title">Produção industrial reage em estados do Sudeste</div>
+            <div class="meta">São Paulo • 4 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=1200&auto=format&fit=crop" alt="Cidade"></div>
+          <div class="content">
+            <div class="kicker">Cidades</div>
+            <div class="title">Transporte público recebe novas faixas exclusivas</div>
+            <div class="meta">Belo Horizonte • 3 min</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="mundo">
+      <div class="sh"><h2>Mundo</h2></div>
+      <div class="grid-4">
+        <!-- 4 cards menores -->
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1473958362962-7d7a5d0b0b02?q=80&w=1200&auto=format&fit=crop" alt="Mapa"></div>
+          <div class="content">
+            <div class="kicker">Geopolítica</div>
+            <div class="title">Cúpula discute cooperação energética entre blocos</div>
+            <div class="meta">Internacional • 4 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1529310399831-ed472b81d0d6?q=80&w=1200&auto=format&fit=crop" alt="Tecnologia"></div>
+          <div class="content">
+            <div class="kicker">Ciência & Tech</div>
+            <div class="title">Pesquisadores anunciam avanço em baterias sólidas</div>
+            <div class="meta">Ciência • 6 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop" alt="Esportes"></div>
+          <div class="content">
+            <div class="kicker">Esportes</div>
+            <div class="title">Seleções definem amistosos antes da temporada</div>
+            <div class="meta">Europa • 2 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop" alt="Cultura"></div>
+          <div class="content">
+            <div class="kicker">Cultura</div>
+            <div class="title">Bienal destaca artistas latino-americanos</div>
+            <div class="meta">Artes • 5 min</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Esportes -->
+    <section class="section" id="esportes">
+      <div class="sh">
+        <h2>Esportes</h2>
+        <div class="tabs">
+          <button class="pill" data-active="true">Futebol</button>
+          <button class="pill">Basquete</button>
+          <button class="pill">Vôlei</button>
+        </div>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=1200&auto=format&fit=crop" alt="Futebol"></div>
+          <div class="content">
+            <div class="kicker">Brasileirão</div>
+            <div class="title">Clássico regional termina sem gols; veja os melhores lances</div>
+            <div class="meta">Agenda e classificação</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop" alt="Basquete"></div>
+          <div class="content">
+            <div class="kicker">NBA</div>
+            <div class="title">Time confirma reforço e anima torcida para os playoffs</div>
+            <div class="meta">Mercado da bola</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop" alt="Vôlei"></div>
+          <div class="content">
+            <div class="kicker">Seleção</div>
+            <div class="title">Equipe fecha série de amistosos com vitória convincente</div>
+            <div class="meta">Pós-jogo e análises</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Lazer / Shows & Eventos / Curiosidades / Negócios  -->
+    <section class="section" id="lazer">
+      <div class="sh"><h2>Lazer</h2></div>
+      <div class="grid-4">
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1541976590-713941681591?q=80&w=1200&auto=format&fit=crop" alt="Gastronomia"></div>
+          <div class="content">
+            <div class="kicker">Gastronomia</div>
+            <div class="title">Roteiro de restaurantes acessíveis para o fim de semana</div>
+            <div class="meta">Guia</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200&auto=format&fit=crop" alt="Parques"></div>
+          <div class="content">
+            <div class="kicker">Ao ar livre</div>
+            <div class="title">Parques urbanos para relaxar e praticar esportes</div>
+            <div class="meta">Passeios</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop" alt="Cinema"></div>
+          <div class="content">
+            <div class="kicker">Cinema</div>
+            <div class="title">Estreias da semana e críticas da redação</div>
+            <div class="meta">Agenda cultural</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop" alt="Livros"></div>
+          <div class="content">
+            <div class="kicker">Leitura</div>
+            <div class="title">Três livros para aquecer o inverno</div>
+            <div class="meta">Resenhas</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="shows">
+      <div class="sh"><h2>Shows & Eventos</h2></div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop" alt="Show ao vivo"></div>
+          <div class="content">
+            <div class="kicker">Música</div>
+            <div class="title">Turnê internacional confirma passagem por BH</div>
+            <div class="meta">Datas e ingressos</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop" alt="Teatro"></div>
+          <div class="content">
+            <div class="kicker">Teatro</div>
+            <div class="title">Peça premiada estreia com elenco nacional</div>
+            <div class="meta">Críticas e bastidores</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81a?q=80&w=1200&auto=format&fit=crop" alt="Feira"></div>
+          <div class="content">
+            <div class="kicker">Feiras & Expos</div>
+            <div class="title">Agenda de feiras gastronômicas e artesanato</div>
+            <div class="meta">Serviço</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="negocios">
+      <div class="sh"><h2>Negócios</h2></div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" alt="Mercado financeiro"></div>
+          <div class="content">
+            <div class="kicker">Mercados</div>
+            <div class="title">Bolsa fecha em alta puxada por varejo e tecnologia</div>
+            <div class="meta">Fechamento • 5 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop" alt="Startups"></div>
+          <div class="content">
+            <div class="kicker">Startups</div>
+            <div class="title">Mapeamento mostra polos de inovação fora do eixo</div>
+            <div class="meta">Empreendedorismo • 6 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Carreira"></div>
+          <div class="content">
+            <div class="kicker">Carreira</div>
+            <div class="title">Como negociar salário com dados e confiança</div>
+            <div class="meta">Recursos humanos • 4 min</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="curiosidades">
+      <div class="sh"><h2>Curiosidades</h2></div>
+      <div class="grid-4">
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1520975693416-41a3f6a97a37?q=80&w=1200&auto=format&fit=crop" alt="Espaço"></div>
+          <div class="content">
+            <div class="kicker">Espaço</div>
+            <div class="title">Por que vemos sempre a mesma face da Lua?</div>
+            <div class="meta">Astronomia • 3 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1520972783833-8f6c8e0d9a8b?q=80&w=1200&auto=format&fit=crop" alt="Natureza"></div>
+          <div class="content">
+            <div class="kicker">Natureza</div>
+            <div class="title">O mistério das árvores que “conversam” pelo solo</div>
+            <div class="meta">Ecologia • 5 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1520975522446-3b1d2c1f0b47?q=80&w=1200&auto=format&fit=crop" alt="História"></div>
+          <div class="content">
+            <div class="kicker">História</div>
+            <div class="title">Quem inventou o primeiro cartão perfurado?</div>
+            <div class="meta">Curiosa-mente • 4 min</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="media"><img src="https://images.unsplash.com/photo-1520975867593-6b5bcd8b9b67?q=80&w=1200&auto=format&fit=crop" alt="Culinária"></div>
+          <div class="content">
+            <div class="kicker">Culinária</div>
+            <div class="title">A origem do pão de queijo mineiro</div>
+            <div class="meta">Gastronomia • 2 min</div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container cols">
+      <div>
+        <div class="brand" style="color:#fff"><div class="logo"><span>J</span></div><div class="name">Jornal Agora</div></div>
+        <p style="margin-top:10px;max-width:520px;color:#c8d3e3">Conteúdo de qualidade com curadoria da redação. Editorias de notícias, esportes, lazer, shows e eventos, negócios e curiosidades.</p>
+      </div>
+      <div>
+        <h4>Editorias</h4>
+        <ul style="list-style:none;padding:0;margin-top:10px;display:grid;gap:6px">
+          <li><a href="#brasil">Brasil</a></li>
+          <li><a href="#mundo">Mundo</a></li>
+          <li><a href="#esportes">Esportes</a></li>
+          <li><a href="#lazer">Lazer</a></li>
+          <li><a href="#shows">Shows & Eventos</a></li>
+          <li><a href="#negocios">Negócios</a></li>
+          <li><a href="#curiosidades">Curiosidades</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Institucional</h4>
+        <ul style="list-style:none;padding:0;margin-top:10px;display:grid;gap:6px">
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Anuncie</a></li>
+          <li><a href="#">Fale conosco</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Newsletter</h4>
+        <form onsubmit="event.preventDefault(); alert('Inscrito com sucesso!');" style="display:grid;gap:10px;margin-top:10px">
+          <input required type="email" placeholder="Seu e-mail" style="padding:10px;border-radius:10px;border:1px solid #314860;background:#0b1b2a;color:#e5e7eb">
+          <button class="btn" type="submit" style="border-color:#6ea8ff">Assinar</button>
+        </form>
+      </div>
+    </div>
+    <div class="container copyright">© 2025 Jornal Agora — Todos os direitos reservados</div>
+  </footer>
+
+  <script>
+    // Menu para mobile (mostra/oculta navegação principal)
+    function toggleMenu(){
+      const nav=document.querySelector('.nav');
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    }
+    // Tema claro/escuro (respeita color-scheme)
+    function toggleTheme(e){
+      e?.preventDefault();
+      const html=document.documentElement;
+      const curr=html.getAttribute('data-theme')||'auto';
+      const next= curr==='light' ? 'dark' : curr==='dark' ? 'auto' : 'light';
+      html.setAttribute('data-theme',next);
+      if(next==='dark'){
+        document.documentElement.style.setProperty('color-scheme','dark');
+      }else if(next==='light'){
+        document.documentElement.style.setProperty('color-scheme','light');
+      }else{
+        document.documentElement.style.removeProperty('color-scheme');
+      }
+    }
+    // Busca simples
+    function toggleSearch(e){
+      e?.preventDefault();
+      document.getElementById('searchBar').classList.toggle('hidden');
+    }
+    // Acessibilidade: foco visível
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Tab') document.body.classList.add('show-outline');
+    });
+  </script>
+</body>
 </html>
