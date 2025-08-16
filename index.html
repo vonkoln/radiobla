@@ -6,7 +6,14 @@
   <title>Bão Sô — Notícias, Esportes, Lazer e Negócios</title>
   <meta name="description" content="Portal de notícias com editorias de Últimas, Brasil, Mundo, Esportes, Lazer, Shows & Eventos, Curiosidades e Negócios." />
   <meta name="color-scheme" content="light dark">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="Bão Sô — Portal de Notícias">
+  <meta property="og:description" content="Conteúdo de qualidade com curadoria da redação">
+  <meta property="og:type" content="website">
+  
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3d59'/><text x='50' y='62' font-size='62' text-anchor='middle' fill='%23fff' font-family='Arial'>J</text></svg>">
+  
   <style>
     :root{
       --bg:#f6f7fb;
@@ -22,95 +29,590 @@
       --shadow:0 8px 24px rgba(0,0,0,.08);
       --shadow-sm:0 2px 8px rgba(0,0,0,.08);
       --grid-gap:18px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     @media (prefers-color-scheme: dark){
       :root{--bg:#0b0e14;--card:#0f141b;--text:#e5e7eb;--muted:#9aa3b2;--brand:#8ab4ff;--brand-2:#ff6b6b;--accent:#38bdf8;--shadow:0 8px 24px rgba(0,0,0,.5);--shadow-sm:0 2px 8px rgba(0,0,0,.5)}
     }
+    
+    /* Scroll suave */
+    html { scroll-behavior: smooth; }
+    
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,Ubuntu,Inter,"Noto Sans",sans-serif;background:var(--bg);color:var(--text);}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,Ubuntu,Inter,"Noto Sans",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height: 1.6;
+    }
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
+    
+    /* Lazy loading placeholder */
+    img{
+      max-width:100%;
+      display:block;
+      transition: var(--transition);
+    }
+    img.loading{
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
     /* Header */
-    .topbar{background:var(--brand);color:#fff}
+    .topbar{
+      background:var(--brand);
+      color:#fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
     .container{width:min(1180px,92vw);margin:auto}
     .topbar .row{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:10px 0}
     .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
-    .brand .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+    .brand .logo{
+      width:40px;height:40px;border-radius:10px;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      display:grid;place-items:center;box-shadow:var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .brand .logo:hover { transform: scale(1.05); }
     .brand .logo span{font-weight:900;font-size:1.1rem}
     .brand .name{font-size:1.2rem}
-    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-    .nav a{opacity:.9;padding:8px 10px;border-radius:10px}
-    .nav a.active,.nav a:hover{background:rgba(255,255,255,.12)}
+    
+    /* Navegação melhorada */
+    .nav{
+      display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+      transition: var(--transition);
+    }
+    .nav a{
+      opacity:.9;padding:8px 10px;border-radius:10px;
+      position: relative;
+      transition: var(--transition);
+    }
+    .nav a:hover, .nav a.active{
+      background:rgba(255,255,255,.12);
+      transform: translateY(-1px);
+    }
+    .nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background: #fff;
+      border-radius: 1px;
+    }
+    
     .actions{display:flex;gap:8px;align-items:center}
-    .btn{border:1px solid rgba(255,255,255,.35);padding:8px 12px;border-radius:10px;color:#fff}
-    .search-input{display:none}
-    .menu-toggle{display:none}
+    .btn{
+      border:1px solid rgba(255,255,255,.35);
+      padding:8px 12px;border-radius:10px;color:#fff;
+      transition: var(--transition);
+      cursor: pointer;
+      background: transparent;
+    }
+    .btn:hover {
+      background: rgba(255,255,255,.1);
+      transform: translateY(-1px);
+    }
 
-    /* Ticker */
-    .ticker{background:#0f2b44;color:#fff;border-top:2px solid #0c2033;border-bottom:2px solid #0c2033}
-    .ticker .inner{display:flex;gap:26px;align-items:center;overflow:auto;white-space:nowrap;padding:10px 0}
+    /* Menu hamburguer animado */
+    .menu-toggle{
+      display:none;
+      flex-direction: column;
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    .hamburger-line {
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      transition: var(--transition);
+      transform-origin: center;
+    }
+    .hamburger-line:nth-child(1) { margin-bottom: 4px; }
+    .hamburger-line:nth-child(2) { margin-bottom: 4px; }
+    .menu-toggle.active .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    .menu-toggle.active .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-toggle.active .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Search bar aprimorada */
+    .search-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .search-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .search-container {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+      transform: scale(0.9);
+      transition: var(--transition);
+    }
+    .search-overlay.active .search-container {
+      transform: scale(1);
+    }
+    .search-input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid var(--brand);
+      border-radius: 15px;
+      font-size: 1.1rem;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus {
+      box-shadow: 0 0 0 3px rgba(30, 61, 89, 0.1);
+    }
+    .search-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .search-close:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+    .search-results {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .search-result {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .search-result:hover {
+      background: var(--bg);
+      padding-left: 10px;
+    }
+
+    /* Market Ticker */
+    .market-ticker {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: #fff;
+      border-top: 1px solid #4a5568;
+      border-bottom: 2px solid #2d3748;
+      overflow: hidden;
+      position: relative;
+    }
+    .market-ticker::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(106, 171, 255, 0.5), transparent);
+    }
+    .ticker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .ticker-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #6ab7ff;
+    }
+    .last-update {
+      font-size: 0.75rem;
+      color: #a0aec0;
+    }
+    .market-inner {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 12px 0;
+      animation: marketScroll 120s linear infinite;
+    }
+    .market-inner::-webkit-scrollbar {
+      display: none;
+    }
+    .market-inner:hover {
+      animation-play-state: paused;
+    }
+    @keyframes marketScroll {
+      0% { transform: translate3d(100%, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+    .market-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .market-item:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-1px);
+    }
+    .market-symbol {
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .market-price {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .market-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .market-change.positive {
+      color: #38a169;
+      background: rgba(56, 161, 105, 0.15);
+    }
+    .market-change.negative {
+      color: #e53e3e;
+      background: rgba(229, 62, 62, 0.15);
+    }
+    .market-change.neutral {
+      color: #a0aec0;
+      background: rgba(160, 174, 192, 0.15);
+    }
+    .market-flag {
+      font-size: 1rem;
+    }
+
+    /* Ticker melhorado */
+    .ticker{
+      background:#0f2b44;color:#fff;
+      border-top:2px solid #0c2033;border-bottom:2px solid #0c2033;
+      overflow: hidden;
+    }
+    .ticker .inner{
+      display:flex;gap:40px;align-items:center;
+      white-space:nowrap;padding:12px 0;
+      animation: scroll 60s linear infinite;
+    }
+    .ticker:hover .inner { animation-play-state: paused; }
+    @keyframes scroll {
+      0% { transform: translate3d(100%, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
     .ticker b{color:#93c5fd;margin-right:6px}
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
 
-    /* Layout */
+    /* Layout com animações */
     .grid{display:grid;grid-template-columns:1.7fr 1fr;gap:var(--grid-gap);margin:24px 0}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--grid-gap)}
     .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--grid-gap)}
 
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .card:hover{transform:translateY(-2px);transition:.2s ease;box-shadow:0 12px 28px rgba(0,0,0,.12)}
-    .card .media{aspect-ratio:16/9;background:#e5e7eb;overflow:hidden}
+    .card{
+      background:var(--card);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 32px rgba(0,0,0,.15);
+    }
+    .card .media{aspect-ratio:16/9;background:#e5e7eb;overflow:hidden;position:relative}
+    .card .media::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+    .card:hover .media::before {
+      transform: translateX(100%);
+    }
     .card .media img{width:100%;height:100%;object-fit:cover}
     .card .content{padding:16px}
-    .kicker{font-size:.78rem;color:var(--brand-2);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+    .kicker{
+      font-size:.78rem;color:var(--brand-2);font-weight:700;
+      text-transform:uppercase;letter-spacing:.6px;
+      position: relative;
+    }
+    .kicker::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--brand-2);
+      transition: var(--transition);
+    }
+    .card:hover .kicker::after {
+      width: 100%;
+    }
     .title{font-size:1.1rem;font-weight:800;margin:6px 0 8px}
     .meta{font-size:.86rem;color:var(--muted)}
 
-    /* Hero */
+    /* Hero melhorado */
     .hero{grid-row:span 2}
     .hero .title{font-size:1.6rem}
     .hero .excerpt{color:var(--muted);margin-top:6px}
 
     /* Sidebar widgets */
-    .widget{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .widget{
+      background:var(--card);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:16px;
+      position: sticky;
+      top: 90px;
+    }
     .widget h3{margin:0 0 12px;font-size:1rem}
     .list{display:grid;gap:12px}
-    .list .item{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center}
+    .list .item{
+      display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;
+      transition: var(--transition);
+    }
+    .list .item:hover {
+      transform: translateX(5px);
+    }
     .list .thumb{width:92px;height:64px;border-radius:10px;overflow:hidden;background:#e5e7eb}
     .list .thumb img{width:100%;height:100%;object-fit:cover}
 
     /* Section header */
     .section{margin:36px 0}
-    .section .sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
-    .section .sh h2{font-size:1.2rem}
+    .section .sh{
+      display:flex;align-items:baseline;justify-content:space-between;
+      margin-bottom:14px;
+    }
+    .section .sh h2{font-size:1.2rem;position:relative}
+    .section .sh h2::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--brand);
+      border-radius: 2px;
+    }
     .section .tabs{display:flex;gap:10px}
-    .pill{padding:6px 10px;border-radius:999px;background:#e2e8f0;color:#111;font-size:.85rem}
-    .pill[data-active="true"]{background:var(--brand);color:#fff}
+    .pill{
+      padding:8px 14px;border-radius:999px;background:#e2e8f0;color:#111;
+      font-size:.85rem;border:none;cursor:pointer;
+      transition: var(--transition);
+    }
+    .pill:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .pill[data-active="true"]{
+      background:var(--brand);color:#fff;
+      box-shadow: var(--shadow-sm);
+    }
 
-    /* Footer */
-    footer{margin-top:40px;background:#0f2b44;color:#c8d3e3}
+    /* Footer melhorado */
+    footer{
+      margin-top:60px;
+      background:linear-gradient(135deg, #0f2b44, #1a365d);
+      color:#c8d3e3;
+      position: relative;
+      overflow: hidden;
+    }
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
     footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;padding:28px 0}
-    footer a{color:#e5e7eb;opacity:.9}
-    .copyright{border-top:1px solid rgba(255,255,255,.12);padding:12px 0;color:#a7b4c5;font-size:.9rem}
+    footer a{
+      color:#e5e7eb;opacity:.9;
+      transition: var(--transition);
+    }
+    footer a:hover {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+    .copyright{
+      border-top:1px solid rgba(255,255,255,.12);
+      padding:12px 0;color:#a7b4c5;font-size:.9rem;
+    }
 
-    /* Chips */
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;font-size:.8rem;background:#eef2ff;color:#1e3a8a}
+    /* Newsletter form */
+    .newsletter-form {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .newsletter-input {
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #314860;
+      background: #0b1b2a;
+      color: #e5e7eb;
+      transition: var(--transition);
+      outline: none;
+    }
+    .newsletter-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(106, 171, 255, 0.1);
+    }
 
-    /* Responsive */
+    /* Chips melhorados */
+    .chip{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 12px;border-radius:999px;font-size:.8rem;
+      background:#eef2ff;color:#1e3a8a;
+      transition: var(--transition);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .chip:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--brand);
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(30, 61, 89, 0.3);
+    }
+
+    /* Responsive melhorado */
     @media (max-width: 1024px){
       .grid{grid-template-columns:1fr}
       .hero{grid-row:auto}
       footer .cols{grid-template-columns:1fr 1fr}
+      .widget { position: static; }
     }
     @media (max-width: 720px){
-      .nav{display:none}
-      .menu-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.35);padding:8px 12px;border-radius:10px}
-      .search-input{display:none}
-      .ticker .inner{gap:16px}
+      .nav{
+        display:none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--brand);
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+      .nav.active { display: flex; }
+      .menu-toggle{display:flex}
+      .ticker .inner{gap:30px}
+      .market-inner{gap:20px}
+      .market-item{padding:4px 8px}
       .grid-3{grid-template-columns:1fr 1fr}
       .grid-4{grid-template-columns:1fr 1fr}
       footer .cols{grid-template-columns:1fr}
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+      }
+    }
+    @media (max-width: 480px){
+      .grid-3, .grid-4{grid-template-columns:1fr}
+      .topbar .row { padding: 8px 0; }
+      .brand .name { font-size: 1rem; }
     }
 
     /* Utilities */
@@ -118,19 +620,28 @@
     .mt-0{margin-top:0}
     .mt-24{margin-top:24px}
     .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+
+    /* Loading animation for images */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .loaded {
+      animation: fadeIn 0.3s ease;
+    }
   </style>
 </head>
 <body>
   <!-- Header -->
-  <div class="topbar">
+  <header class="topbar">
     <div class="container row">
       <div class="row">
-        <a class="brand" href="#">
+        <a class="brand" href="#" aria-label="Bão Sô - Página inicial">
           <div class="logo"><span>J</span></div>
           <div class="name">Bão Sô</div>
         </a>
       </div>
-      <nav class="nav" aria-label="Navegação principal">
+      <nav class="nav" aria-label="Navegação principal" id="mainNav">
         <a href="#ultimas" class="active">Últimas</a>
         <a href="#brasil">Brasil</a>
         <a href="#mundo">Mundo</a>
@@ -141,26 +652,48 @@
         <a href="#curiosidades">Curiosidades</a>
       </nav>
       <div class="actions">
-        <button class="menu-toggle" aria-label="Abrir menu" onclick="toggleMenu()">Menu</button>
-        <a class="btn" href="#" onclick="toggleSearch(event)">Pesquisar</a>
-        <a class="btn" href="#" onclick="toggleTheme(event)">Tema</a>
+        <button class="menu-toggle" aria-label="Abrir menu" id="menuToggle">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <button class="btn" onclick="toggleSearch()" aria-label="Pesquisar">🔍 Pesquisar</button>
+        <button class="btn" onclick="toggleTheme()" aria-label="Alternar tema">🌓 Tema</button>
       </div>
+    </div>
+  </header>
+
+  <!-- Search Overlay -->
+  <div id="searchOverlay" class="search-overlay">
+    <div class="search-container">
+      <button class="search-close" onclick="toggleSearch()" aria-label="Fechar busca">✕</button>
+      <input type="search" class="search-input" id="searchInput" placeholder="Busque por título, assunto, editoria..." aria-label="Campo de busca">
+      <div id="searchResults" class="search-results"></div>
     </div>
   </div>
 
-  <!-- Search bar (overlay simple) -->
-  <div id="searchBar" class="container hidden" style="padding:12px 0">
-    <input type="search" placeholder="Busque por título, assunto, editoria..." aria-label="Pesquisar" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #d1d5db;background:var(--card);color:var(--text)">
+  <!-- Market Ticker -->
+  <div class="market-ticker">
+    <div class="container">
+      <div class="ticker-header">
+        <span class="ticker-title">💹 Mercados</span>
+        <span class="last-update" id="lastUpdate">Atualizando...</span>
+      </div>
+      <div class="market-inner" id="marketTicker">
+        <!-- Dados serão preenchidos via JavaScript -->
+      </div>
+    </div>
   </div>
 
   <!-- Ticker / Últimas -->
   <div class="ticker">
     <div class="container">
       <div class="inner" role="marquee" aria-label="Últimas notícias">
-        <div><b>Últimas</b> Mercado abre em alta após divulgação de indicadores.</div>
-        <div><b>Tempo</b> Frente fria avança; atenção a chuvas intensas no sul/sudeste.</div>
-        <div><b>Esportes</b> Clássico termina empatado; decisão fica para o jogo de volta.</div>
-        <div><b>Cultura</b> Mostra de cinema nacional anuncia programação gratuita.</div>
+        <div class="ticker-item"><b>Últimas</b> Mercado abre em alta após divulgação de indicadores.</div>
+        <div class="ticker-item"><b>Tempo</b> Frente fria avança; atenção a chuvas intensas no sul/sudeste.</div>
+        <div class="ticker-item"><b>Esportes</b> Clássico termina empatado; decisão fica para o jogo de volta.</div>
+        <div class="ticker-item"><b>Cultura</b> Mostra de cinema nacional anuncia programação gratuita.</div>
+        <div class="ticker-item"><b>Tecnologia</b> IA generativa transforma o setor de varejo brasileiro.</div>
       </div>
     </div>
   </div>
@@ -169,7 +702,9 @@
   <main class="container">
     <section class="grid" id="ultimas">
       <article class="card hero">
-        <div class="media"><img alt="Imagem de destaque" src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop"></div>
+        <div class="media">
+          <img data-src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop" alt="Imagem de destaque" class="loading">
+        </div>
         <div class="content">
           <div class="kicker">Destaque do dia</div>
           <h1 class="title">Transição profissional e ética nas vendas: um relato que virou aprendizado</h1>
@@ -184,10 +719,12 @@
       </article>
 
       <aside aria-label="Mais lidas" class="widget">
-        <h3>Mais lidas</h3>
+        <h3>📈 Mais lidas</h3>
         <div class="list">
           <a class="item" href="#">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1581093588401-16ef1b2c1200?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div class="thumb">
+              <img data-src="https://images.unsplash.com/photo-1581093588401-16ef1b2c1200?q=80&w=600&auto=format&fit=crop" alt="IA generativa" class="loading">
+            </div>
             <div>
               <div class="kicker">Tecnologia</div>
               <div class="title">IA generativa ganha novas aplicações no varejo</div>
@@ -195,7 +732,9 @@
             </div>
           </a>
           <a class="item" href="#">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div class="thumb">
+              <img data-src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop" alt="Empreendedores" class="loading">
+            </div>
             <div>
               <div class="kicker">Negócios</div>
               <div class="title">Empreendedores apostam em nichos de alto valor</div>
@@ -203,7 +742,9 @@
             </div>
           </a>
           <a class="item" href="#">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600&auto=format&fit=crop" alt=""></div>
+            <div class="thumb">
+              <img data-src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600&auto=format&fit=crop" alt="Sono e produtividade" class="loading">
+            </div>
             <div>
               <div class="kicker">Saúde</div>
               <div class="title">Sono e produtividade: guia prático para o dia a dia</div>
@@ -214,7 +755,7 @@
       </aside>
 
       <aside aria-label="Boletins" class="widget">
-        <h3>Boletins</h3>
+        <h3>📧 Boletins</h3>
         <div class="tag-row">
           <a class="chip" href="#">Manhã</a>
           <a class="chip" href="#">Mercado</a>
@@ -222,25 +763,30 @@
           <a class="chip" href="#">Cidades</a>
         </div>
         <div class="mt-24" style="display:grid;gap:12px">
-          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox"> Receber alertas por e-mail</label>
-          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox"> Notificações no navegador</label>
+          <label style="display:flex;gap:8px;align-items:center">
+            <input type="checkbox"> Receber alertas por e-mail
+          </label>
+          <label style="display:flex;gap:8px;align-items:center">
+            <input type="checkbox"> Notificações no navegador
+          </label>
         </div>
       </aside>
     </section>
 
-    <!-- Brasil / Mundo / Economia: grade 3 colunas -->
+    <!-- Brasil -->
     <section class="section" id="brasil">
       <div class="sh">
-        <h2>Brasil</h2>
+        <h2>🇧🇷 Brasil</h2>
         <div class="tabs">
-          <button class="pill" data-active="true">Hoje</button>
-          <button class="pill">Semana</button>
+          <button class="pill" data-active="true" onclick="switchTab(this)">Hoje</button>
+          <button class="pill" onclick="switchTab(this)">Semana</button>
         </div>
       </div>
       <div class="grid-3">
-        <!-- Repetir cards -->
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop" alt="Congresso Nacional"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop" alt="Congresso Nacional" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Política</div>
             <div class="title">Reforma administrativa avança em comissões</div>
@@ -248,7 +794,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1200&auto=format&fit=crop" alt="Indústria"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1200&auto=format&fit=crop" alt="Indústria" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Economia</div>
             <div class="title">Produção industrial reage em estados do Sudeste</div>
@@ -256,7 +804,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=1200&auto=format&fit=crop" alt="Cidade"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=1200&auto=format&fit=crop" alt="Cidade" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Cidades</div>
             <div class="title">Transporte público recebe novas faixas exclusivas</div>
@@ -266,12 +816,14 @@
       </div>
     </section>
 
+    <!-- Mundo -->
     <section class="section" id="mundo">
-      <div class="sh"><h2>Mundo</h2></div>
+      <div class="sh"><h2>🌍 Mundo</h2></div>
       <div class="grid-4">
-        <!-- 4 cards menores -->
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1473958362962-7d7a5d0b0b02?q=80&w=1200&auto=format&fit=crop" alt="Mapa"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1473958362962-7d7a5d0b0b02?q=80&w=1200&auto=format&fit=crop" alt="Mapa" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Geopolítica</div>
             <div class="title">Cúpula discute cooperação energética entre blocos</div>
@@ -279,7 +831,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1529310399831-ed472b81d0d6?q=80&w=1200&auto=format&fit=crop" alt="Tecnologia"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1529310399831-ed472b81d0d6?q=80&w=1200&auto=format&fit=crop" alt="Tecnologia" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Ciência & Tech</div>
             <div class="title">Pesquisadores anunciam avanço em baterias sólidas</div>
@@ -287,7 +841,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop" alt="Esportes"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop" alt="Esportes" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Esportes</div>
             <div class="title">Seleções definem amistosos antes da temporada</div>
@@ -295,7 +851,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop" alt="Cultura"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop" alt="Cultura" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Cultura</div>
             <div class="title">Bienal destaca artistas latino-americanos</div>
@@ -308,16 +866,18 @@
     <!-- Esportes -->
     <section class="section" id="esportes">
       <div class="sh">
-        <h2>Esportes</h2>
+        <h2>⚽ Esportes</h2>
         <div class="tabs">
-          <button class="pill" data-active="true">Futebol</button>
-          <button class="pill">Basquete</button>
-          <button class="pill">Vôlei</button>
+          <button class="pill" data-active="true" onclick="switchTab(this)">Futebol</button>
+          <button class="pill" onclick="switchTab(this)">Basquete</button>
+          <button class="pill" onclick="switchTab(this)">Vôlei</button>
         </div>
       </div>
       <div class="grid-3">
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=1200&auto=format&fit=crop" alt="Futebol"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=1200&auto=format&fit=crop" alt="Futebol" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Brasileirão</div>
             <div class="title">Clássico regional termina sem gols; veja os melhores lances</div>
@@ -325,7 +885,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop" alt="Basquete"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop" alt="Basquete" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">NBA</div>
             <div class="title">Time confirma reforço e anima torcida para os playoffs</div>
@@ -333,7 +895,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop" alt="Vôlei"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop" alt="Vôlei" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Seleção</div>
             <div class="title">Equipe fecha série de amistosos com vitória convincente</div>
@@ -343,12 +907,14 @@
       </div>
     </section>
 
-    <!-- Lazer / Shows & Eventos / Curiosidades / Negócios  -->
+    <!-- Lazer -->
     <section class="section" id="lazer">
-      <div class="sh"><h2>Lazer</h2></div>
+      <div class="sh"><h2>🎭 Lazer</h2></div>
       <div class="grid-4">
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1541976590-713941681591?q=80&w=1200&auto=format&fit=crop" alt="Gastronomia"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1541976590-713941681591?q=80&w=1200&auto=format&fit=crop" alt="Gastronomia" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Gastronomia</div>
             <div class="title">Roteiro de restaurantes acessíveis para o fim de semana</div>
@@ -356,7 +922,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200&auto=format&fit=crop" alt="Parques"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200&auto=format&fit=crop" alt="Parques" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Ao ar livre</div>
             <div class="title">Parques urbanos para relaxar e praticar esportes</div>
@@ -364,7 +932,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop" alt="Cinema"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop" alt="Cinema" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Cinema</div>
             <div class="title">Estreias da semana e críticas da redação</div>
@@ -372,7 +942,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop" alt="Livros"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop" alt="Livros" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Leitura</div>
             <div class="title">Três livros para aquecer o inverno</div>
@@ -382,11 +954,14 @@
       </div>
     </section>
 
+    <!-- Shows & Eventos -->
     <section class="section" id="shows">
-      <div class="sh"><h2>Shows & Eventos</h2></div>
+      <div class="sh"><h2>🎵 Shows & Eventos</h2></div>
       <div class="grid-3">
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop" alt="Show ao vivo"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop" alt="Show ao vivo" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Música</div>
             <div class="title">Turnê internacional confirma passagem por BH</div>
@@ -394,7 +969,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop" alt="Teatro"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop" alt="Teatro" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Teatro</div>
             <div class="title">Peça premiada estreia com elenco nacional</div>
@@ -402,7 +979,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81a?q=80&w=1200&auto=format&fit=crop" alt="Feira"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81a?q=80&w=1200&auto=format&fit=crop" alt="Feira" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Feiras & Expos</div>
             <div class="title">Agenda de feiras gastronômicas e artesanato</div>
@@ -412,11 +991,14 @@
       </div>
     </section>
 
+    <!-- Negócios -->
     <section class="section" id="negocios">
-      <div class="sh"><h2>Negócios</h2></div>
+      <div class="sh"><h2>💼 Negócios</h2></div>
       <div class="grid-3">
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" alt="Mercado financeiro"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" alt="Mercado financeiro" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Mercados</div>
             <div class="title">Bolsa fecha em alta puxada por varejo e tecnologia</div>
@@ -424,7 +1006,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop" alt="Startups"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop" alt="Startups" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Startups</div>
             <div class="title">Mapeamento mostra polos de inovação fora do eixo</div>
@@ -432,7 +1016,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Carreira"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Carreira" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Carreira</div>
             <div class="title">Como negociar salário com dados e confiança</div>
@@ -442,11 +1028,14 @@
       </div>
     </section>
 
+    <!-- Curiosidades -->
     <section class="section" id="curiosidades">
-      <div class="sh"><h2>Curiosidades</h2></div>
+      <div class="sh"><h2>🤔 Curiosidades</h2></div>
       <div class="grid-4">
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1520975693416-41a3f6a97a37?q=80&w=1200&auto=format&fit=crop" alt="Espaço"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1520975693416-41a3f6a97a37?q=80&w=1200&auto=format&fit=crop" alt="Espaço" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Espaço</div>
             <div class="title">Por que vemos sempre a mesma face da Lua?</div>
@@ -454,15 +1043,19 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1520972783833-8f6c8e0d9a8b?q=80&w=1200&auto=format&fit=crop" alt="Natureza"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1520972783833-8f6c8e0d9a8b?q=80&w=1200&auto=format&fit=crop" alt="Natureza" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Natureza</div>
-            <div class="title">O mistério das árvores que “conversam” pelo solo</div>
+            <div class="title">O mistério das árvores que "conversam" pelo solo</div>
             <div class="meta">Ecologia • 5 min</div>
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1520975522446-3b1d2c1f0b47?q=80&w=1200&auto=format&fit=crop" alt="História"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1520975522446-3b1d2c1f0b47?q=80&w=1200&auto=format&fit=crop" alt="História" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">História</div>
             <div class="title">Quem inventou o primeiro cartão perfurado?</div>
@@ -470,7 +1063,9 @@
           </div>
         </article>
         <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1520975867593-6b5bcd8b9b67?q=80&w=1200&auto=format&fit=crop" alt="Culinária"></div>
+          <div class="media">
+            <img data-src="https://images.unsplash.com/photo-1520975867593-6b5bcd8b9b67?q=80&w=1200&auto=format&fit=crop" alt="Culinária" class="loading">
+          </div>
           <div class="content">
             <div class="kicker">Culinária</div>
             <div class="title">A origem do pão de queijo mineiro</div>
@@ -481,12 +1076,22 @@
     </section>
   </main>
 
+  <!-- Back to top button -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Voltar ao topo">
+    ↑
+  </button>
+
   <!-- Footer -->
   <footer>
     <div class="container cols">
       <div>
-        <div class="brand" style="color:#fff"><div class="logo"><span>J</span></div><div class="name">Bão Sô</div></div>
-        <p style="margin-top:10px;max-width:520px;color:#c8d3e3">Conteúdo de qualidade com curadoria da redação. Editorias de notícias, esportes, lazer, shows e eventos, negócios e curiosidades.</p>
+        <div class="brand" style="color:#fff">
+          <div class="logo"><span>J</span></div>
+          <div class="name">Bão Sô</div>
+        </div>
+        <p style="margin-top:10px;max-width:520px;color:#c8d3e3">
+          Conteúdo de qualidade com curadoria da redação. Editorias de notícias, esportes, lazer, shows e eventos, negócios e curiosidades.
+        </p>
       </div>
       <div>
         <h4>Editorias</h4>
@@ -511,44 +1116,399 @@
       </div>
       <div>
         <h4>Newsletter</h4>
-        <form onsubmit="event.preventDefault(); alert('Inscrito com sucesso!');" style="display:grid;gap:10px;margin-top:10px">
-          <input required type="email" placeholder="Seu e-mail" style="padding:10px;border-radius:10px;border:1px solid #314860;background:#0b1b2a;color:#e5e7eb">
-          <button class="btn" type="submit" style="border-color:#6ea8ff">Assinar</button>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+          <input 
+            required 
+            type="email" 
+            placeholder="Seu e-mail" 
+            class="newsletter-input"
+            aria-label="Digite seu e-mail para newsletter"
+          >
+          <button class="btn" type="submit" style="border-color:#6ea8ff">
+            📧 Assinar
+          </button>
         </form>
       </div>
     </div>
-    <div class="container copyright">© 2025 Bão Sô — Todos os direitos reservados</div>
+    <div class="container copyright">
+      © 2025 Bão Sô — Todos os direitos reservados
+    </div>
   </footer>
 
   <script>
-    // Menu para mobile (mostra/oculta navegação principal)
-    function toggleMenu(){
-      const nav=document.querySelector('.nav');
-      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    // ========== MARKET DATA ==========
+    const marketData = {
+      stocks: [
+        { symbol: 'IBOV', name: 'Ibovespa', flag: '🇧🇷', price: 126845.67, change: 1.34 },
+        { symbol: 'SPX', name: 'S&P 500', flag: '🇺🇸', price: 4567.89, change: -0.23 },
+        { symbol: 'DJI', name: 'Dow Jones', flag: '🇺🇸', price: 34567.12, change: 0.78 },
+        { symbol: 'IXIC', name: 'Nasdaq', flag: '🇺🇸', price: 14234.56, change: -1.45 },
+        { symbol: 'FTSE', name: 'FTSE 100', flag: '🇬🇧', price: 7456.78, change: 0.56 },
+        { symbol: 'DAX', name: 'DAX', flag: '🇩🇪', price: 15678.90, change: -0.87 },
+        { symbol: 'NIKKEI', name: 'Nikkei 225', flag: '🇯🇵', price: 28456.78, change: 0.92 }
+      ],
+      crypto: [
+        { symbol: 'BTC', name: 'Bitcoin', flag: '₿', price: 43567.89, change: 2.34 },
+        { symbol: 'ETH', name: 'Ethereum', flag: '⟐', price: 2345.67, change: -1.56 },
+        { symbol: 'BNB', name: 'Binance', flag: '⬡', price: 456.78, change: 0.89 },
+        { symbol: 'ADA', name: 'Cardano', flag: '₳', price: 0.67, change: -2.34 },
+        { symbol: 'SOL', name: 'Solana', flag: '◎', price: 89.45, change: 3.45 },
+        { symbol: 'DOT', name: 'Polkadot', flag: '●', price: 12.34, change: -0.78 },
+        { symbol: 'DOGE', name: 'Dogecoin', flag: '🐕', price: 0.089, change: 5.67 }
+      ]
+    };
+
+    function updateMarketData() {
+      const container = document.getElementById('marketTicker');
+      const lastUpdate = document.getElementById('lastUpdate');
+      
+      if (!container) return;
+
+      // Simular flutuações de preços (±3%)
+      const allItems = [...marketData.stocks, ...marketData.crypto];
+      
+      allItems.forEach(item => {
+        const fluctuation = (Math.random() - 0.5) * 6; // -3% a +3%
+        const newChange = item.change + fluctuation;
+        item.change = Math.max(-10, Math.min(10, newChange)); // Limitar entre -10% e +10%
+        
+        // Atualizar preço baseado na mudança
+        const changePercent = item.change / 100;
+        item.price = item.price * (1 + changePercent * 0.01);
+      });
+
+      // Renderizar dados
+      const html = allItems.map(item => {
+        const changeClass = item.change > 0 ? 'positive' : 
+                           item.change < 0 ? 'negative' : 'neutral';
+        const changeSymbol = item.change > 0 ? '+' : '';
+        
+        return `
+          <div class="market-item" title="${item.name}">
+            <span class="market-flag">${item.flag}</span>
+            <div>
+              <div class="market-symbol">${item.symbol}</div>
+              <div class="market-price">${formatPrice(item.price)}</div>
+            </div>
+            <div class="market-change ${changeClass}">
+              ${changeSymbol}${item.change.toFixed(2)}%
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      container.innerHTML = html;
+      
+      // Atualizar timestamp
+      const now = new Date();
+      lastUpdate.textContent = `Atualizado às ${now.toLocaleTimeString('pt-BR')}`;
     }
-    // Tema claro/escuro (respeita color-scheme)
-    function toggleTheme(e){
-      e?.preventDefault();
-      const html=document.documentElement;
-      const curr=html.getAttribute('data-theme')||'auto';
-      const next= curr==='light' ? 'dark' : curr==='dark' ? 'auto' : 'light';
-      html.setAttribute('data-theme',next);
-      if(next==='dark'){
-        document.documentElement.style.setProperty('color-scheme','dark');
-      }else if(next==='light'){
-        document.documentElement.style.setProperty('color-scheme','light');
-      }else{
-        document.documentElement.style.removeProperty('color-scheme');
+
+    function formatPrice(price) {
+      if (price >= 1000) {
+        return price.toLocaleString('pt-BR', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        });
+      } else if (price >= 1) {
+        return price.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      } else {
+        return price.toFixed(4);
       }
     }
-    // Busca simples
-    function toggleSearch(e){
-      e?.preventDefault();
-      document.getElementById('searchBar').classList.toggle('hidden');
+
+    // Inicializar mercados
+    let marketInterval;
+    
+    function startMarketUpdates() {
+      updateMarketData(); // Primeira atualização
+      marketInterval = setInterval(updateMarketData, 60000); // A cada 1 minuto
     }
-    // Acessibilidade: foco visível
-    document.addEventListener('keydown', (e)=>{
-      if(e.key==='Tab') document.body.classList.add('show-outline');
+    
+    function stopMarketUpdates() {
+      if (marketInterval) {
+        clearInterval(marketInterval);
+      }
+    }
+
+    // ========== LAZY LOADING ==========
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.remove('loading');
+          img.classList.add('loaded');
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+
+    // ========== CARD ANIMATIONS ==========
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, entry.target.dataset.delay || 0);
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // ========== MENU TOGGLE ==========
+    function toggleMenu() {
+      const nav = document.getElementById('mainNav');
+      const toggle = document.getElementById('menuToggle');
+      
+      nav.classList.toggle('active');
+      toggle.classList.toggle('active');
+    }
+
+    // ========== THEME TOGGLE ==========
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'auto';
+      const themes = ['auto', 'light', 'dark'];
+      const currentIndex = themes.indexOf(currentTheme);
+      const nextTheme = themes[(currentIndex + 1) % themes.length];
+      
+      html.setAttribute('data-theme', nextTheme);
+      
+      if (nextTheme === 'dark') {
+        document.documentElement.style.setProperty('color-scheme', 'dark');
+      } else if (nextTheme === 'light') {
+        document.documentElement.style.setProperty('color-scheme', 'light');
+      } else {
+        document.documentElement.style.removeProperty('color-scheme');
+      }
+      
+      // Save preference
+      try {
+        localStorage.setItem('theme', nextTheme);
+      } catch (e) {
+        console.log('Theme preference not saved - localStorage not available');
+      }
+    }
+
+    // ========== SEARCH FUNCTIONALITY ==========
+    const searchData = [
+      { title: 'Transição profissional e ética nas vendas', category: 'Carreira', section: 'ultimas' },
+      { title: 'IA generativa ganha novas aplicações no varejo', category: 'Tecnologia', section: 'ultimas' },
+      { title: 'Reforma administrativa avança em comissões', category: 'Política', section: 'brasil' },
+      { title: 'Produção industrial reage em estados do Sudeste', category: 'Economia', section: 'brasil' },
+      { title: 'Cúpula discute cooperação energética entre blocos', category: 'Geopolítica', section: 'mundo' },
+      { title: 'Clássico regional termina sem gols', category: 'Brasileirão', section: 'esportes' },
+      { title: 'Roteiro de restaurantes acessíveis', category: 'Gastronomia', section: 'lazer' },
+      { title: 'Turnê internacional confirma passagem por BH', category: 'Música', section: 'shows' },
+      { title: 'Bolsa fecha em alta puxada por varejo', category: 'Mercados', section: 'negocios' },
+      { title: 'Por que vemos sempre a mesma face da Lua?', category: 'Espaço', section: 'curiosidades' }
+    ];
+
+    function toggleSearch() {
+      const overlay = document.getElementById('searchOverlay');
+      const input = document.getElementById('searchInput');
+      const results = document.getElementById('searchResults');
+      
+      overlay.classList.toggle('active');
+      
+      if (overlay.classList.contains('active')) {
+        setTimeout(() => input.focus(), 300);
+      } else {
+        input.value = '';
+        results.innerHTML = '';
+      }
+    }
+
+    function performSearch(query) {
+      const results = document.getElementById('searchResults');
+      
+      if (!query.trim()) {
+        results.innerHTML = '';
+        return;
+      }
+      
+      const filtered = searchData.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      if (filtered.length === 0) {
+        results.innerHTML = '<div class="search-result">Nenhum resultado encontrado</div>';
+        return;
+      }
+      
+      results.innerHTML = filtered.map(item => 
+        `<div class="search-result" onclick="goToSection('${item.section}')">
+          <div style="font-weight: 600;">${item.title}</div>
+          <div style="font-size: 0.9rem; color: var(--muted); margin-top: 4px;">
+            ${item.category} • ${item.section.charAt(0).toUpperCase() + item.section.slice(1)}
+          </div>
+        </div>`
+      ).join('');
+    }
+
+    function goToSection(sectionId) {
+      toggleSearch();
+      setTimeout(() => {
+        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+
+    // ========== TAB SWITCHING ==========
+    function switchTab(clickedTab) {
+      const tabs = clickedTab.parentElement.querySelectorAll('.pill');
+      tabs.forEach(tab => tab.setAttribute('data-active', 'false'));
+      clickedTab.setAttribute('data-active', 'true');
+    }
+
+    // ========== SCROLL TO TOP ==========
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ========== NEWSLETTER ==========
+    function handleNewsletter(event) {
+      event.preventDefault();
+      const input = event.target.querySelector('input');
+      alert(`📧 Inscrito com sucesso! Bem-vindo(a), ${input.value}!`);
+      input.value = '';
+    }
+
+    // ========== SMOOTH NAVIGATION ==========
+    function setupSmoothNavigation() {
+      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').substring(1);
+          const target = document.getElementById(targetId);
+          
+          if (target) {
+            // Update active nav link
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            // Smooth scroll
+            target.scrollIntoView({ behavior: 'smooth' });
+            
+            // Close mobile menu if open
+            const nav = document.getElementById('mainNav');
+            const toggle = document.getElementById('menuToggle');
+            if (nav.classList.contains('active')) {
+              nav.classList.remove('active');
+              toggle.classList.remove('active');
+            }
+          }
+        });
+      });
+    }
+
+    // ========== BACK TO TOP VISIBILITY ==========
+    function handleBackToTop() {
+      const backToTop = document.getElementById('backToTop');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+    }
+
+    // ========== INITIALIZATION ==========
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup market updates
+      startMarketUpdates();
+      
+      // Stop updates when page becomes hidden (battery optimization)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopMarketUpdates();
+        } else {
+          startMarketUpdates();
+        }
+      });
+      
+      // Setup observers
+      document.querySelectorAll('img[data-src]').forEach((img, index) => {
+        img.dataset.delay = index * 100;
+        imageObserver.observe(img);
+      });
+      
+      document.querySelectorAll('.card').forEach((card, index) => {
+        card.dataset.delay = index * 100;
+        cardObserver.observe(card);
+      });
+      
+      // Setup interactions
+      setupSmoothNavigation();
+      handleBackToTop();
+      
+      // Setup search
+      const searchInput = document.getElementById('searchInput');
+      let searchTimeout;
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          performSearch(e.target.value);
+        }, 300);
+      });
+      
+      // Setup menu toggle
+      document.getElementById('menuToggle').addEventListener('click', toggleMenu);
+      
+      // Load saved theme
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && savedTheme !== 'auto') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+          if (savedTheme === 'dark') {
+            document.documentElement.style.setProperty('color-scheme', 'dark');
+          } else if (savedTheme === 'light') {
+            document.documentElement.style.setProperty('color-scheme', 'light');
+          }
+        }
+      } catch (e) {
+        console.log('Could not load saved theme');
+      }
+      
+      // Close search on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const overlay = document.getElementById('searchOverlay');
+          if (overlay.classList.contains('active')) {
+            toggleSearch();
+          }
+        }
+      });
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const nav = document.getElementById('mainNav');
+        const toggle = document.getElementById('menuToggle');
+        const topbar = document.querySelector('.topbar');
+        
+        if (!topbar.contains(e.target) && nav.classList.contains('active')) {
+          nav.classList.remove('active');
+          toggle.classList.remove('active');
+        }
+      });
+    });
+
+    // ========== ACCESSIBILITY ==========
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        document.body.classList.add('show-outline');
+      }
+    });
+
+    document.addEventListener('mousedown', () => {
+      document.body.classList.remove('show-outline');
     });
   </script>
 </body>
