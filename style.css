@@ -1,0 +1,99 @@
+/* ===== Reset básico ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-color: #f5f6fa;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ===== Cabeçalho ===== */
+.headerbar {
+  background: #1e3d59;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 4px solid #e63946;
+}
+
+.headerbar h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ===== Estrutura principal ===== */
+main {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* ===== Imagem principal ===== */
+.main-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* ===== Conteúdo abaixo da imagem ===== */
+.below-hero {
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.main-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3d59;
+  margin-bottom: 15px;
+  border-left: 6px solid #e63946;
+  padding-left: 10px;
+}
+
+.main-text {
+  font-size: 1.05rem;
+  color: #333;
+  text-align: justify;
+}
+
+/* ===== Destaques no texto ===== */
+.main-text p,
+.main-text {
+  margin-bottom: 15px;
+}
+
+.main-text strong {
+  color: #e63946;
+}
+
+.main-text em {
+  font-style: italic;
+  color: #444;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 1.6rem;
+  }
+  
+  .headerbar h2 {
+    font-size: 1.4rem;
+  }
+  
+  .below-hero {
+    padding: 20px;
+  }
+}
