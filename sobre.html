@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre o Municipal — Portal de Notícias</title>
+  <meta name="description" content="Conheça a história, missão e valores do Municipal, portal de notícias com conteúdo de qualidade e curadoria editorial." />
+  <meta name="color-scheme" content="light dark">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3d59'/><text x='50' y='62' font-size='62' text-anchor='middle' fill='%23fff' font-family='Arial'>M</text></svg>">
+  
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#1b1f24;
+      --muted:#6b7280;
+      --brand:#1e3d59;
+      --brand-2:#e63946;
+      --accent:#0ea5e9;
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(0,0,0,.08);
+      --shadow-sm:0 2px 8px rgba(0,0,0,.08);
+      --grid-gap:18px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0e14;--card:#0f141b;--text:#e5e7eb;--muted:#9aa3b2;--brand:#8ab4ff;--brand-2:#ff6b6b;--accent:#38bdf8;--shadow:0 8px 24px rgba(0,0,0,.5);--shadow-sm:0 2px 8px rgba(0,0,0,.5)}
+    }
+    
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,Ubuntu,Inter,"Noto Sans",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height: 1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    
+    /* Header */
+    .topbar{
+      background:var(--brand);
+      color:#fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .container{width:min(1180px,92vw);margin:auto}
+    .topbar .row{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand .logo{
+      width:40px;height:40px;border-radius:10px;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      display:grid;place-items:center;box-shadow:var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .brand .logo:hover { transform: scale(1.05); }
+    .brand .logo span{font-weight:900;font-size:1.1rem}
+    .brand .name{font-size:1.2rem}
+    
+    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .nav a{opacity:.9;padding:8px 10px;border-radius:10px;transition: var(--transition)}
+    .nav a:hover{background:rgba(255,255,255,.12);transform: translateY(-1px)}
+    
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn{
+      border:1px solid rgba(255,255,255,.35);
+      padding:8px 12px;border-radius:10px;color:#fff;
+      transition: var(--transition);
+      cursor: pointer;
+      background: transparent;
+    }
+    .btn:hover {
+      background: rgba(255,255,255,.1);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--brand) 0%, #2a5a7a 100%);
+      color: white;
+      text-align: center;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.02)" points="0,0 1000,300 1000,1000 0,700"/></svg>');
+      background-size: cover;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Content Sections */
+    .section {
+      padding: 4rem 0;
+    }
+    
+    .section:nth-child(even) {
+      background: var(--card);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin-top: 2rem;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .feature-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      text-align: center;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .feature-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    
+    .feature-description {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Team Section */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .team-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 1rem auto;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .team-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .team-role {
+      color: var(--brand);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    
+    .team-bio {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--brand);
+      transform: translateX(-50%);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin: 2rem 0;
+      width: 50%;
+    }
+    
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+    
+    .timeline-content {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-content {
+      margin-right: 2rem;
+    }
+    
+    .timeline-item:nth-child(even) .timeline-content {
+      margin-left: 2rem;
+    }
+    
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      width: 0;
+      height: 0;
+      border: 10px solid;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-content::before {
+      right: -20px;
+      border-color: transparent transparent transparent var(--card);
+    }
+    
+    .timeline-item:nth-child(even) .timeline-content::before {
+      left: -20px;
+      border-color: transparent var(--card) transparent transparent;
+    }
+    
+    .timeline-year {
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .timeline-description {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--brand);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      color: white;
+      text-align: center;
+      padding: 4rem 0;
+      margin-top: 4rem;
+    }
+    
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-description {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .cta-btn {
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+      font-size: 1.1rem;
+    }
+    
+    .cta-btn.primary {
+      background: white;
+      color: var(--brand);
+    }
+    
+    .cta-btn.secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .timeline::before {
+        left: 20px;
+      }
+      
+      .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 3rem;
+      }
+      
+      .timeline-item .timeline-content {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+      
+      .timeline-content::before {
+        left: -20px !important;
+        border-color: transparent var(--card) transparent transparent !important;
+      }
+      
+      .cta-title {
+        font-size: 2rem;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .menu-toggle{display:none}
+    @media (max-width: 720px){
+      .nav{display:none}
+      .menu-toggle{
+        display:flex;
+        flex-direction: column;
+        width: 30px;
+        height: 24px;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+      }
+      .hamburger-line {
+        width: 100%;
+        height: 2px;
+        background: #fff;
+        transition: var(--transition);
+        transform-origin: center;
+        margin-bottom: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="container row">
+      <div class="row">
+        <a class="brand" href="/" aria-label="Municipal - Página inicial">
+          <div class="logo"><span>M</span></div>
+          <div class="name">Municipal</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="/#ultimas">Últimas</a>
+        <a href="/#brasil">Brasil</a>
+        <a href="/#mundo">Mundo</a>
+        <a href="/#esportes">Esportes</a>
+        <a href="/#lazer">Lazer</a>
+        <a href="/#shows">Shows & Eventos</a>
+        <a href="/#negocios">Negócios</a>
+        <a href="/#curiosidades">Curiosidades</a>
+      </nav>
+      <div class="actions">
+        <button class="menu-toggle" aria-label="Abrir menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <button class="btn" onclick="history.back()" aria-label="Voltar">← Voltar</button>
+        <button class="btn" onclick="toggleTheme()" aria-label="Alternar tema">🌓 Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Sobre o Municipal</h1>
+        <p>Conteúdo de qualidade com curadoria editorial, conectando você aos acontecimentos que realmente importam</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <div>
+          <h2 class="section-title">Nossa Missão</h2>
+          <p>O <strong>Municipal</strong> nasceu da necessidade de um jornalismo acessível, ético e relevante. Em um cenário saturado de informações, nossa missão é curar e apresentar conteúdo que realmente agregue valor à vida de nossos leitores.</p>
+          <p>Acreditamos que a informação de qualidade é um direito fundamental e trabalhamos diariamente para democratizar o acesso ao conhecimento através de um jornalismo independente e responsável.</p>
+        </div>
+        <div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-number">50K+</span>
+              <span class="stat-label">Leitores mensais</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">1.2M+</span>
+              <span class="stat-label">Visualizações/mês</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">8</span>
+              <span class="stat-label">Editorias ativas</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">24/7</span>
+              <span class="stat-label">Cobertura contínua</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nossos Valores</h2>
+        <p class="section-subtitle">Os princípios que norteiam nosso trabalho editorial e nossa relação com os leitores</p>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="feature-icon">🎯</span>
+          <h3 class="feature-title">Precisão</h3>
+          <p class="feature-description">Verificação rigorosa de fatos e fontes para garantir a veracidade de cada informação publicada.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚖️</span>
+          <h3 class="feature-title">Imparcialidade</h3>
+          <p class="feature-description">Cobertura equilibrada dos fatos, apresentando múltiplas perspectivas quando necessário.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔍</span>
+          <h3 class="feature-title">Transparência</h3>
+          <p class="feature-description">Processo editorial aberto, com correções públicas e identificação clara de fontes.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🌍</span>
+          <h3 class="feature-title">Relevância</h3>
+          <p class="feature-description">Foco em temas que impactam diretamente a vida de nossa comunidade e região.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📚</span>
+          <h3 class="feature-title">Educação</h3>
+          <p class="feature-description">Conteúdo que informa, contexualiza e contribui para o desenvolvimento crítico dos leitores.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🤝</span>
+          <h3 class="feature-title">Comunidade</h3>
+          <p class="feature-description">Proximidade com nossos leitores, valorizando feedback e participação ativa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nossa História</h2>
+        <p class="section-subtitle">A evolução do Municipal desde sua fundação até os dias atuais</p>
+      </div>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2020</div>
+            <h3 class="timeline-title">Fundação</h3>
+            <p class="timeline-description">Lançamento oficial do Municipal com foco em notícias locais e regionais, iniciando com uma equipe de 3 jornalistas.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2021</div>
+            <h3 class="timeline-title">Expansão Editorial</h3>
+            <p class="timeline-description">Criação das editorias de Esportes, Lazer e Negócios, aumentando significativamente nossa cobertura editorial.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2022</div>
+            <h3 class="timeline-title">Modernização Digital</h3>
+            <p class="timeline-description">Reformulação completa da plataforma digital, implementação de newsletters e melhoria da experiência do usuário.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2023</div>
+            <h3 class="timeline-title">Reconhecimento</h3>
+            <p class="timeline-description">Primeiro prêmio de jornalismo digital regional e parceria com organizações locais para cobertura especializada.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2024</div>
+            <h3 class="timeline-title">Novas Editorias</h3>
+            <p class="timeline-description">Lançamento das editorias Shows & Eventos e Curiosidades, completando nosso portfólio editorial atual.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-year">2025</div>
+            <h3 class="timeline-title">Presente</h3>
+            <p class="timeline-description">Consolidação como referência em jornalismo digital regional, com mais de 50 mil leitores mensais ativos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nossa Equipe</h2>
+        <p class="section-subtitle">Profissionais apaixonados por jornalismo de qualidade</p>
+      </div>
+      
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">AM</div>
+          <h3 class="team-name">Ana Martins</h3>
+          <div class="team-role">Editora-Chefe</div>
+          <p class="team-bio">15 anos de experiência em jornalismo digital. Especialista em gestão editorial e desenvolvimento de conteúdo multiplataforma.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">RS</div>
+          <h3 class="team-name">Roberto Silva</h3>
+          <div class="team-role">Editor de Esportes</div>
+          <p class="team-bio">Ex-repórter esportivo de grandes veículos, traz expertise em cobertura esportiva local e nacional.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CF</div>
+          <h3 class="team-name">Carla Ferreira</h3>
+          <div class="team-role">Editora de Negócios</div>
+          <p class="team-bio">MBA em Economia, especializada em mercado financeiro e empreendedorismo regional.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">ML</div>
+          <h3 class="team-name">Marcos Lima</h3>
+          <div class="team-role">Editor de Tecnologia</div>
+          <p class="team-bio">Jornalista especializado em inovação e tecnologia, com foco em transformação digital.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Guidelines Section -->
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <div>
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop" alt="Redação do Municipal" style="width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+        </div>
+        <div>
+          <h2 class="section-title">Diretrizes Editoriais</h2>
+          <p>Nosso trabalho é pautado por rigorosos padrões editoriais que garantem a qualidade e confiabilidade de nosso conteúdo:</p>
+          <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">✅ <strong>Verificação de fontes:</strong> Mínimo de duas fontes independentes para fatos controversos</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">✅ <strong>Correções públicas:</strong> Erros são corrigidos de forma transparente e visível</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">✅ <strong>Separação clara:</strong> Distinção evidente entre notícia, opinião e material publicitário</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">✅ <strong>Privacidade:</strong> Respeito aos direitos de imagem e privacidade dos envolvidos</li>
+            <li style="padding: 0.5rem 0;">✅ <strong>Diversidade:</strong> Representação equilibrada de diferentes grupos e perspectivas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact/CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-title">Faça Parte da Nossa História</h2>
+      <p class="cta-description">Seja um leitor ativo ou contribua com nossa missão de democratizar a informação de qualidade</p>
+      <div class="cta-buttons">
+        <button class="cta-btn primary" onclick="window.location.href='/#newsletter'">📧 Assinar Newsletter</button>
+        <button class="cta-btn secondary" onclick="window.location.href='mailto:contato@municipal.com'">✉️ Fale Conosco</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ========== THEME TOGGLE ==========
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'auto';
+      const themes = ['auto', 'light', 'dark'];
+      const currentIndex = themes.indexOf(currentTheme);
+      const nextTheme = themes[(currentIndex + 1) % themes.length];
+      
+      html.setAttribute('data-theme', nextTheme);
+      
+      if (nextTheme === 'dark') {
+        document.documentElement.style.setProperty('color-scheme', 'dark');
+      } else if (nextTheme === 'light') {
+        document.documentElement.style.setProperty('color-scheme', 'light');
+      } else {
+        document.documentElement.style.removeProperty('color-scheme');
+      }
+    }
+
+    // ========== ANIMATIONS ==========
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // ========== INITIALIZATION ==========
+    document.addEventListener('DOMContentLoaded', () => {
+      // Animate elements on scroll
+      const animateElements = document.querySelectorAll('.feature-card, .team-card, .timeline-item, .stat-card');
+      animateElements.forEach((el, index
